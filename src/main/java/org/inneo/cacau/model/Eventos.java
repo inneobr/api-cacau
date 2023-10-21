@@ -5,10 +5,12 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
+@Setter
 @Entity
 @Builder
 @NoArgsConstructor

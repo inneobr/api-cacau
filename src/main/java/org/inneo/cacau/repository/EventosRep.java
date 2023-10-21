@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 public interface EventosRep extends JpaRepository<Eventos, UUID>, JpaSpecificationExecutor<Eventos>  {
-
+	Eventos findByUuid(UUID uuid);
 }

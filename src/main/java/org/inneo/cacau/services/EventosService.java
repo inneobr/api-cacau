@@ -3,21 +3,26 @@ package org.inneo.cacau.services;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
-
 import org.inneo.cacau.model.Eventos;
 import org.inneo.cacau.repository.EventosRep;
-import org.inneo.cacau.utilitarios.SpecEventos;
-import org.inneo.cacau.utilitarios.enums.Situacao;
-import org.inneo.cacau.utilitarios.filters.EventosFilter;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
+import lombok.RequiredArgsConstructor;
+
+import org.inneo.cacau.utilitarios.SpecEventos;
+import org.inneo.cacau.utilitarios.enums.Situacao;
+import org.inneo.cacau.utilitarios.filters.EventosFilter;
+
+
 @Service
-public class EventosService {
-	private EventosRep eventosRep;
+@RequiredArgsConstructor
+public class EventosService {	
+	private final EventosRep eventosRep;
 	
-	public Eventos save(Eventos request) {
+	public Eventos save(Eventos request) {		
 		Eventos eventos = request.getUuid() != null ? eventosRep.getReferenceById(request.getUuid()) : new Eventos();
+		request.setCreatedAt(eventos.getCreatedAt());
 		BeanUtils.copyProperties(request, eventos);
 		return eventosRep.save(eventos);		
 	}	
@@ -32,17 +37,17 @@ public class EventosService {
 	}
 	
 	public Eventos findEvent(UUID uuid) {
-		return eventosRep.getReferenceById(uuid);
+		return eventosRep.findByUuid(uuid);
 	}
 	
 	public void disable(UUID uuid) {
-		Eventos evento = eventosRep.getReferenceById(uuid);
+		Eventos evento = eventosRep.findByUuid(uuid);
 		evento.setDisabledAt(new Date());
 		eventosRep.save(evento);
 	}
 	
 	public void enable(UUID uuid) {
-		Eventos evento = eventosRep.getReferenceById(uuid);
+		Eventos evento = eventosRep.findByUuid(uuid);
 		evento.setDisabledAt(null);
 		eventosRep.save(evento);
 	}
