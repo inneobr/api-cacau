@@ -3,15 +3,15 @@ package org.inneo.cacau.services;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+
 import org.inneo.cacau.model.Eventos;
-import org.inneo.cacau.repository.EventosRep;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
+import org.inneo.cacau.repository.EventosRep;
 import org.springframework.stereotype.Service;
 
-import lombok.RequiredArgsConstructor;
-
-import org.inneo.cacau.utilitarios.SpecEventos;
 import org.inneo.cacau.utilitarios.enums.Situacao;
+import org.inneo.cacau.utilitarios.specs.SpecEventos;
 import org.inneo.cacau.utilitarios.filters.EventosFilter;
 
 

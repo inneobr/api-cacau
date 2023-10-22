@@ -1,13 +1,13 @@
 package org.inneo.cacau.utilitarios.specs;
 
-import org.inneo.cacau.model.Eventos;
+import org.inneo.cacau.model.Videos;
 import org.inneo.cacau.utilitarios.enums.Situacao;
 import org.springframework.data.jpa.domain.Specification;
 
 import jakarta.persistence.criteria.Predicate;
 
-public class SpecEventos {
-	public static Specification<Eventos> daSituacao(Situacao situacao){
+public class SpecVideos {
+	public static Specification<Videos> daSituacao(Situacao situacao){
         return (root, query, builder) -> {
             if(situacao != null) {
                 if(situacao.equals(Situacao.ATIVO)) {
