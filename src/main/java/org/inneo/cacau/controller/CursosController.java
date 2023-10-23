@@ -3,16 +3,16 @@ package org.inneo.cacau.controller;
 import java.util.List;
 import java.util.UUID;
 
-import org.inneo.cacau.model.Videos;
+import org.inneo.cacau.model.Cursos;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.inneo.cacau.services.VideosService;
+import org.inneo.cacau.services.CursosService;
 import org.springframework.http.ResponseEntity;
 import io.swagger.v3.oas.annotations.Operation;
 
-import org.inneo.cacau.utilitarios.filters.VideosFilter;
+import org.inneo.cacau.utilitarios.filters.CursosFilter;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,14 +23,14 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.multipart.MultipartFile;
 @RestController
 @RequiredArgsConstructor
 @CrossOrigin(origins = "*")
-@RequestMapping("/v1/videos")
-@Tag(name = "Videos", description = "Retorna as funções de videos.")
-public class VideosController {
-	private final VideosService videosService;
+@RequestMapping("/v1/cursos")
+@Tag(name = "Cursos", description = "Retorna as funções de cursos.")
+public class CursosController {
+	private final CursosService cursoService;
 	
 	@Operation(summary = "Novo", method = "POST")
 	@ApiResponses(value = {
@@ -39,8 +39,21 @@ public class VideosController {
 			@ApiResponse(responseCode = "401", description = "Permissão negada!" )
 	})
 	@PostMapping
-	public ResponseEntity<Videos> publicar(@RequestBody Videos videos) {
-	   return ResponseEntity.ok(videosService.save(videos));
+	public ResponseEntity<Cursos> save(@RequestBody Cursos curso) {
+	   return ResponseEntity.ok(cursoService.save(curso));
+	}
+	
+	@Operation(summary = "Anexos", method = "POST")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Cadastrado com sucesso!" ),
+			@ApiResponse(responseCode = "400", description = "Requisição falhou." ),
+			@ApiResponse(responseCode = "401", description = "Permissão negada!" )
+	})
+	@PostMapping("/thumbnail")
+	public ResponseEntity<Cursos> thumbnail(
+			@RequestParam("uuid") UUID uuid,
+			@RequestParam("anexo") MultipartFile anexo){
+		return ResponseEntity.ok(cursoService.thumbnail(uuid, anexo));
 	}
 	
 	@Operation(summary = "Listar", method = "GET")
@@ -50,8 +63,8 @@ public class VideosController {
 			@ApiResponse(responseCode = "401", description = "Permissão negada!" )
 	})
 	@GetMapping
-	public ResponseEntity<List<Videos>> findAll() {
-	   return ResponseEntity.ok(videosService.findAll());
+	public ResponseEntity<List<Cursos>> findAll() {
+	   return ResponseEntity.ok(cursoService.findAll());
 	}
 	
 	@Operation(summary = "Filtrar", method = "GET")
@@ -61,8 +74,8 @@ public class VideosController {
 			@ApiResponse(responseCode = "401", description = "Permissão negada!" )
 	})
 	@GetMapping("/filtrar")
-	public ResponseEntity<List<Videos>> findFilter(VideosFilter filter) {
-	   return ResponseEntity.ok(videosService.findFilter(filter));
+	public ResponseEntity<List<Cursos>> findFilter(CursosFilter filter) {
+	   return ResponseEntity.ok(cursoService.findFilter(filter));
 	}
 	
 	@Operation(summary = "Unico", method = "GET")
@@ -71,9 +84,9 @@ public class VideosController {
 			@ApiResponse(responseCode = "400", description = "Requisição falhou." ),
 			@ApiResponse(responseCode = "401", description = "Permissão negada!" )
 	})
-	@GetMapping("/evento")
-	public ResponseEntity<Videos> findEvent(@RequestParam(name="uuid") UUID uuid) {
-	   return ResponseEntity.ok(videosService.findEvent(uuid));
+	@GetMapping("/burcar")
+	public ResponseEntity<Cursos> findEvent(@RequestParam(name="uuid") UUID uuid) {
+	   return ResponseEntity.ok(cursoService.findEvent(uuid));
 	}
 	
 	@Operation(summary = "Disable", method = "GET")
@@ -85,10 +98,10 @@ public class VideosController {
 	@GetMapping("/disable")
 	public ResponseEntity<?> disable(@RequestParam(name="uuid") UUID uuid) {
 		try {
-			videosService.disable(uuid);
-			return new ResponseEntity<>("Evento arquivado com sucesso.", HttpStatus.CREATED);
+			cursoService.disable(uuid);
+			return new ResponseEntity<>("Curso arquivado com sucesso.", HttpStatus.CREATED);
 		} catch (Exception e) {
-			return new ResponseEntity<>("Não foi possivel arquivar o evento.", HttpStatus.CREATED);
+			return new ResponseEntity<>("Não foi possivel arquivar o curso.", HttpStatus.BAD_REQUEST);
 		}
 	}
 	
@@ -101,10 +114,10 @@ public class VideosController {
 	@GetMapping("/enable")
 	public ResponseEntity<?> enable(@RequestParam(name="uuid") UUID uuid) {
 		try {
-			videosService.enable(uuid);
-			return new ResponseEntity<>("Evento publicado com sucesso.", HttpStatus.CREATED);
+			cursoService.enable(uuid);
+			return new ResponseEntity<>("Curso publicado com sucesso.", HttpStatus.CREATED);
 		} catch (Exception e) {
-			return new ResponseEntity<>("Não foi possivel publicar o evento.", HttpStatus.CREATED);
+			return new ResponseEntity<>("Não foi possivel publicar o curso.", HttpStatus.BAD_REQUEST);
 		}	
 	}
 }

@@ -1,12 +1,11 @@
 package org.inneo.cacau;
 
+import lombok.Data;
+import lombok.Builder;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import lombok.Builder;
-import lombok.Data;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @RestController
 @SpringBootApplication

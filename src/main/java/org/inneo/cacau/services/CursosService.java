@@ -3,50 +3,64 @@ package org.inneo.cacau.services;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
-import org.inneo.cacau.model.Videos;
+
+import java.io.IOException;
+import org.inneo.cacau.model.Cursos;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
-import org.inneo.cacau.repository.VideosRep;
+import org.inneo.cacau.repository.CursosRep;
+
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import org.inneo.cacau.utilitarios.enums.Situacao;
-import org.inneo.cacau.utilitarios.specs.SpecVideos;
-import org.inneo.cacau.utilitarios.filters.VideosFilter;
+import org.inneo.cacau.utilitarios.specs.CursoSpec;
+import org.inneo.cacau.utilitarios.filters.CursosFilter;
 
 @Service
 @RequiredArgsConstructor
-public class VideosService {	
-	private final VideosRep videosRep;
+public class CursosService {	
+	private final CursosRep cursosRep;
 	
-	public Videos save(Videos request) {		
-		Videos videos = request.getUuid() != null ? videosRep.getReferenceById(request.getUuid()) : new Videos();
-		request.setCreatedAt(videos.getCreatedAt());
-		BeanUtils.copyProperties(request, videos);
-		return videosRep.save(videos);		
+	public Cursos save(Cursos request) {		
+		Cursos curso = request.getUuid() != null ? cursosRep.getReferenceById(request.getUuid()) : new Cursos();
+		request.setCreatedAt(curso.getCreatedAt());
+		BeanUtils.copyProperties(request, curso);
+		return cursosRep.save(curso);		
 	}	
 	
-	public List<Videos> findFilter(VideosFilter filter) {
-		return videosRep.findAll();
+	public Cursos thumbnail(UUID uuid, MultipartFile anexo) {		
+		try {
+			Cursos curso = cursosRep.findByUuid(uuid);
+			curso.setThumbnail(anexo.getBytes());		
+			return cursosRep.save(curso);	
+		} catch (IOException e) {
+			throw new  NullPointerException(e.getMessage());
+		}	
 	}
 	
-	public List<Videos> findAll() {
-		List<Videos> videos = videosRep.findAll(SpecVideos.daSituacao(Situacao.ATIVO));
-		return videos;		
+	public List<Cursos> findFilter(CursosFilter filter) {		
+		return cursosRep.findAll();
 	}
 	
-	public Videos findEvent(UUID uuid) {
-		return videosRep.findByUuid(uuid);
+	public List<Cursos> findAll() {
+		List<Cursos> cursos = cursosRep.findAll(CursoSpec.daSituacao(Situacao.ATIVO));		
+		return cursos;		
+	}	
+
+	public Cursos findEvent(UUID uuid) {
+		return cursosRep.findByUuid(uuid);
 	}
 	
 	public void disable(UUID uuid) {
-		Videos videos = videosRep.findByUuid(uuid);
-		videos.setDisabledAt(new Date());
-		videosRep.save(videos);
+		Cursos curso = cursosRep.findByUuid(uuid);
+		curso.setDisabledAt(new Date());
+		cursosRep.save(curso);
 	}
 	
 	public void enable(UUID uuid) {
-		Videos videos = videosRep.findByUuid(uuid);
-		videos.setDisabledAt(null);
-		videosRep.save(videos);
+		Cursos curso = cursosRep.findByUuid(uuid);
+		curso.setDisabledAt(null);
+		cursosRep.save(curso);
 	}
 
 }

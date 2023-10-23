@@ -3,8 +3,7 @@ package org.inneo.cacau.utilitarios.filters;
 import lombok.Data;
 
 @Data
-public class VideosFilter {
-	private String titulo;
+public class CursosFilter {
+	private String curso;
 	private String descricao;
-	private String path;
 }
