@@ -2,7 +2,6 @@ package org.inneo.cacau.services;
 
 import org.mockito.Mock;
 import org.junit.jupiter.api.Test;
-import org.inneo.cacau.model.Aulas;
 import org.inneo.cacau.model.Cursos;
 
 import static org.mockito.Mockito.when;
@@ -24,7 +23,6 @@ public class CursoServiceTest {
 	
 	@Test
 	public void saveTest() {
-		getVideo();
 		when(cursosRep.save(curso)).thenReturn(curso);
 		var create = cursoService.save(curso);
 		assertNotNull(create.getUuid());
@@ -36,10 +34,4 @@ public class CursoServiceTest {
 		var create = cursoService.findAll();
 		assertNotNull(create);		
 	} 
-	
-	public Aulas getVideo() {
-		Aulas videos = new Aulas();
-		videos.setTitulo("Blusinha");
-		return videos;
-	}
 }

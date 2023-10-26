@@ -6,15 +6,15 @@ import lombok.Setter;
 
 import lombok.NoArgsConstructor;
 import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
 import lombok.AllArgsConstructor;
-
-import org.apache.tomcat.util.codec.binary.Base64;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
 
 @Getter
 @Setter
@@ -35,26 +35,8 @@ public class Aulas extends GenericEntity{
 	@Column(name="url_video")
 	private String urlVideo;
 	
-	@Column(name = "id_curso")
-	private String idCurso;
-	
-	@Transient
-	private String thumbnail;
-	
 	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    @Column(name = "bytes")
-    private byte[] bytes; 
-	
-	@Transient
-	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private String base64;
-    
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    public byte[] getBase64ToBytes() {
-        return Base64.decodeBase64(base64);
-    }
-	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    public String getBytesToBase64() {
-        return Base64.encodeBase64String(bytes);
-    }
+	@ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="id_curso")
+	private Cursos curso;
 }

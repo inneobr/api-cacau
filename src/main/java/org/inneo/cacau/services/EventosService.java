@@ -21,7 +21,7 @@ public class EventosService {
 	private final EventosRep eventosRep;
 	
 	public Eventos save(Eventos request) {		
-		Eventos eventos = request.getUuid() != null ? eventosRep.getReferenceById(request.getUuid()) : new Eventos();
+		Eventos eventos = request.getUuid() != null ? eventosRep.findByUuid(request.getUuid()) : new Eventos();
 		request.setCreatedAt(eventos.getCreatedAt());
 		BeanUtils.copyProperties(request, eventos);
 		return eventosRep.save(eventos);		

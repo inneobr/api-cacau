@@ -1,9 +1,12 @@
 package org.inneo.cacau.controller;
 
 import java.util.List;
+
 import java.util.UUID;
 
 import org.inneo.cacau.model.Cursos;
+import org.inneo.cacau.records.CursosResponse;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 
@@ -23,7 +26,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
+
 @RestController
 @RequiredArgsConstructor
 @CrossOrigin(origins = "*")
@@ -43,19 +46,6 @@ public class CursosController {
 	   return ResponseEntity.ok(cursoService.save(curso));
 	}
 	
-	@Operation(summary = "Anexos", method = "POST")
-	@ApiResponses(value = {
-			@ApiResponse(responseCode = "200", description = "Cadastrado com sucesso!" ),
-			@ApiResponse(responseCode = "400", description = "Requisição falhou." ),
-			@ApiResponse(responseCode = "401", description = "Permissão negada!" )
-	})
-	@PostMapping("/thumbnail")
-	public ResponseEntity<Cursos> thumbnail(
-			@RequestParam("uuid") UUID uuid,
-			@RequestParam("anexo") MultipartFile anexo){
-		return ResponseEntity.ok(cursoService.thumbnail(uuid, anexo));
-	}
-	
 	@Operation(summary = "Listar", method = "GET")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "Carregada com sucesso!" ),
@@ -63,7 +53,7 @@ public class CursosController {
 			@ApiResponse(responseCode = "401", description = "Permissão negada!" )
 	})
 	@GetMapping
-	public ResponseEntity<List<Cursos>> findAll() {
+	public ResponseEntity<List<CursosResponse>> findAll() {
 	   return ResponseEntity.ok(cursoService.findAll());
 	}
 	
